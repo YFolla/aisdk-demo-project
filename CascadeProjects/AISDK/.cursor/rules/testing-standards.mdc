@@ -1,0 +1,113 @@
+---
+globs: *.test.ts,*.test.tsx,*.spec.ts,*.spec.tsx
+---
+
+# Testing Standards
+
+## Test File Organization
+Co-locate tests with source files:
+```
+components/
+├── chat/
+│   ├── chat-interface.tsx
+│   ├── chat-interface.test.tsx
+│   ├── message-bubble.tsx
+│   └── message-bubble.test.tsx
+```
+
+## Test Structure
+Follow this pattern for all tests:
+
+```typescript
+/**
+ * @fileoverview Test suite description and coverage
+ */
+
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { vi } from 'vitest'
+import ComponentName from './component-name'
+
+// Mock external dependencies
+vi.mock('@/lib/ai/providers', () => ({
+  generateResponse: vi.fn()
+}))
+
+describe('ComponentName', () => {
+  /**
+   * Test description explaining what behavior is being verified
+   * @description Detailed explanation of test scenario and expectations
+   */
+  it('should handle specific user interaction correctly', async () => {
+    // Arrange
+    const mockProps = {
+      prop1: 'value1',
+      onAction: vi.fn()
+    }
+
+    // Act
+    render(<ComponentName {...mockProps} />)
+    const button = screen.getByRole('button', { name: /submit/i })
+    fireEvent.click(button)
+
+    // Assert
+    await waitFor(() => {
+      expect(mockProps.onAction).toHaveBeenCalledWith(expectedValue)
+    })
+  })
+})
+```
+
+## AI-Specific Testing
+For AI operations, mock external services:
+
+```typescript
+// Mock AI SDK
+vi.mock('@ai-sdk/openai', () => ({
+  openai: vi.fn(() => ({
+    generateText: vi.fn().mockResolvedValue({
+      text: 'Mock AI response',
+      usage: { totalTokens: 100 }
+    })
+  }))
+}))
+
+// Test streaming responses
+it('should handle streaming AI responses', async () => {
+  const mockStream = new ReadableStream({
+    start(controller) {
+      controller.enqueue('chunk 1')
+      controller.enqueue('chunk 2')
+      controller.close()
+    }
+  })
+  
+  // Test implementation
+})
+```
+
+## Test Categories
+1. **Unit Tests** - Individual functions and components
+2. **Integration Tests** - Component interactions and API flows
+3. **E2E Tests** - Full user workflows across the application
+
+## Testing Guidelines
+- Write descriptive test names explaining the behavior
+- Use AAA pattern (Arrange, Act, Assert)
+- Mock external dependencies and AI services
+- Test both success and error scenarios
+- Include accessibility testing with screen readers
+- Test responsive behavior at different breakpoints
+- Verify loading states and error handling
+
+## Performance Testing
+- Test component render times
+- Verify memory usage doesn't leak
+- Test with large datasets (chat history, documents)
+- Measure API response times
+- Test streaming performance
+
+## Coverage Requirements
+- Aim for >80% coverage on critical paths
+- Focus on business logic and user interactions
+- Don't test implementation details
+- Prioritize edge cases and error conditions

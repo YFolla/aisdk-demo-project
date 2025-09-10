@@ -1,0 +1,64 @@
+---
+globs: *.tsx
+---
+
+# React Component Standards
+
+## Component Structure
+Follow this pattern for all React components:
+
+```typescript
+/**
+ * @fileoverview Component description and main functionality
+ */
+
+interface ComponentNameProps {
+  /** Prop description with JSDoc */
+  propName: string
+  /** Optional prop with default */
+  optionalProp?: boolean
+  /** Callback function description */
+  onAction?: (data: SomeType) => void
+}
+
+/**
+ * Component description and behavior
+ * @description Detailed explanation of component functionality
+ * @param props - Component configuration and event handlers
+ * @returns JSX element with specific behavior
+ */
+export default function ComponentName({
+  propName,
+  optionalProp = false,
+  onAction
+}: ComponentNameProps) {
+  // Implementation
+}
+```
+
+## Component Guidelines
+- Use functional components with hooks
+- Prefer composition over inheritance
+- Keep components under 200 lines
+- Extract complex logic into custom hooks
+- Use TypeScript interfaces for all props
+- Include comprehensive prop documentation
+
+## UI Component Patterns
+- Use Shadcn/ui components as base
+- Follow responsive design principles (mobile-first)
+- Implement proper accessibility (ARIA labels, keyboard navigation)
+- Use consistent spacing from theme system
+- Apply proper error boundaries for AI operations
+
+## State Management
+- Use local state for component-specific data
+- Use Zustand stores for shared application state
+- Implement proper cleanup for subscriptions
+- Handle loading and error states consistently
+
+## Styling
+- Use Tailwind CSS utility classes
+- Follow theme-rules.md for colors and spacing
+- Implement responsive breakpoints consistently
+- Use CSS custom properties for theme values

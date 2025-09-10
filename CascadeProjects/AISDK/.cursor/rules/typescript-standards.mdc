@@ -1,0 +1,66 @@
+---
+globs: *.ts,*.tsx
+---
+
+# TypeScript Standards for AI Lab
+
+## File Structure Template
+Every TypeScript file must follow this structure:
+
+```typescript
+/**
+ * @fileoverview Brief description of file purpose and main functionality
+ * @author Your Name
+ * @created YYYY-MM-DD
+ */
+
+// External imports (libraries, frameworks)
+import React from 'react'
+import { NextRequest, NextResponse } from 'next/server'
+
+// Internal imports (grouped by type)
+import { ChatMessage } from '@/types/chat'
+import { useChatStore } from '@/stores/chat-store'
+import { Button } from '@/components/ui/button'
+
+// Type definitions and interfaces
+interface ComponentProps {
+  // ... prop definitions
+}
+
+// Main implementation
+```
+
+## Function Documentation
+All functions require comprehensive JSDoc comments:
+
+```typescript
+/**
+ * Brief function description
+ * @description Detailed explanation of functionality and behavior
+ * @param paramName - Parameter description with type info
+ * @returns Promise/value description with type info
+ * @throws {ErrorType} When specific error conditions occur
+ * @example
+ * ```typescript
+ * const result = await functionName(param)
+ * console.log(result)
+ * ```
+ */
+```
+
+## Type Definitions
+- Use interfaces for object shapes
+- Use types for unions and computed types
+- Use enums for constants with semantic meaning
+- Use const assertions for immutable data
+- Prefer generic types for reusable components
+
+## Import Organization
+1. External libraries (React, Next.js, third-party)
+2. Internal types (from @/types)
+3. Internal utilities (from @/lib)
+4. Internal components (from @/components)
+5. Internal hooks (from @/hooks)
+6. Internal stores (from @/stores)
+7. Relative imports (same directory)

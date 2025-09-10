@@ -1,0 +1,126 @@
+---
+globs: stores/*.ts,hooks/use-*.ts
+---
+
+# State Management Standards
+
+## Zustand Store Pattern
+All stores must follow this structure:
+
+```typescript
+/**
+ * @fileoverview Store description and state management
+ */
+
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+interface StoreNameState {
+  // State properties
+  data: DataType[]
+  isLoading: boolean
+  error: string | null
+  
+  // Actions
+  addItem: (item: DataType) => void
+  updateItem: (id: string, updates: Partial<DataType>) => void
+  removeItem: (id: string) => void
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
+}
+
+/**
+ * Store description and purpose
+ * @description Detailed explanation of store functionality
+ */
+export const useStoreNameStore = create<StoreNameState>()(
+  persist(
+    (set, get) => ({
+      // Initial state
+      data: [],
+      isLoading: false,
+      error: null,
+
+      // Actions with descriptive names
+      addItem: (item) =>
+        set((state) => ({ data: [...state.data, item] })),
+      
+      updateItem: (id, updates) =>
+        set((state) => ({
+          data: state.data.map(item => 
+            item.id === id ? { ...item, ...updates } : item
+          )
+        })),
+      
+      removeItem: (id) =>
+        set((state) => ({
+          data: state.data.filter(item => item.id !== id)
+        })),
+      
+      setLoading: (loading) => set({ isLoading: loading }),
+      setError: (error) => set({ error })
+    }),
+    {
+      name: 'store-name-storage',
+      partialize: (state) => ({ data: state.data }) // Only persist necessary data
+    }
+  )
+)
+```
+
+## Custom Hooks Pattern
+Custom hooks should encapsulate complex logic:
+
+```typescript
+/**
+ * @fileoverview Custom hook description and functionality
+ */
+
+/**
+ * Hook description and behavior
+ * @description Detailed explanation of hook functionality
+ * @param param - Parameter description
+ * @returns Hook return value description
+ */
+export function useCustomHook(param: string) {
+  const [state, setState] = useState<StateType>(initialValue)
+  
+  // Effect descriptions
+  useEffect(() => {
+    // Effect implementation with cleanup
+    return () => {
+      // Cleanup logic
+    }
+  }, [dependencies])
+  
+  // Memoized values and callbacks
+  const memoizedValue = useMemo(() => {
+    return expensiveCalculation(state)
+  }, [state])
+  
+  const handleAction = useCallback((data: ActionData) => {
+    // Action implementation
+  }, [dependencies])
+  
+  return {
+    state,
+    memoizedValue,
+    handleAction,
+    isLoading: state.loading
+  }
+}
+```
+
+## Store Organization
+- [chat-store.ts](mdc:stores/chat-store.ts) - Chat messages and history
+- [ui-store.ts](mdc:stores/ui-store.ts) - UI state (panels, themes, modes)
+- [document-store.ts](mdc:stores/document-store.ts) - Document management
+- [agent-store.ts](mdc:stores/agent-store.ts) - Agent orchestration state
+- [developer-store.ts](mdc:stores/developer-store.ts) - Debug information
+
+## Performance Guidelines
+- Use selectors to prevent unnecessary re-renders
+- Implement proper cleanup for subscriptions
+- Avoid storing derived data in state
+- Use immer middleware for complex updates
+- Persist only essential data to localStorage

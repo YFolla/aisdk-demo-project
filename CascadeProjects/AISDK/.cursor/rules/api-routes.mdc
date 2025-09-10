@@ -1,0 +1,90 @@
+---
+globs: app/api/**/route.ts
+---
+
+# API Route Standards
+
+## Route Structure
+All API routes must follow this pattern:
+
+```typescript
+/**
+ * @fileoverview API route description and functionality
+ */
+
+import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+
+// Request/Response schemas
+const RequestSchema = z.object({
+  // Define expected request structure
+})
+
+const ResponseSchema = z.object({
+  // Define response structure
+})
+
+/**
+ * Route handler description
+ * @description Detailed explanation of endpoint functionality
+ */
+export async function POST(request: NextRequest) {
+  try {
+    // Parse and validate request
+    const body = await request.json()
+    const validatedInput = RequestSchema.parse(body)
+
+    // Process request
+    const result = await processRequest(validatedInput)
+
+    // Return structured response
+    return NextResponse.json({
+      success: true,
+      data: result
+    })
+  } catch (error) {
+    return handleAPIError(error)
+  }
+}
+```
+
+## Error Handling
+Implement consistent error handling:
+
+```typescript
+function handleAPIError(error: unknown): NextResponse {
+  if (error instanceof z.ZodError) {
+    return NextResponse.json(
+      { success: false, error: 'Invalid request format', details: error.errors },
+      { status: 400 }
+    )
+  }
+
+  if (error instanceof Error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    )
+  }
+
+  return NextResponse.json(
+    { success: false, error: 'Unknown error occurred' },
+    { status: 500 }
+  )
+}
+```
+
+## AI-Specific Routes
+For AI-related endpoints:
+- Use streaming responses where appropriate
+- Implement proper timeout handling
+- Add rate limiting for expensive operations
+- Include cost and token tracking
+- Handle provider-specific errors
+
+## Route Organization
+- Chat endpoints: [app/api/chat/](mdc:app/api/chat/)
+- Tool endpoints: [app/api/tools/](mdc:app/api/tools/)
+- Document processing: [app/api/documents/](mdc:app/api/documents/)
+- Agent orchestration: [app/api/agents/](mdc:app/api/agents/)
+- Image operations: [app/api/images/](mdc:app/api/images/)

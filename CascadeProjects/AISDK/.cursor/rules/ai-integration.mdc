@@ -1,0 +1,72 @@
+---
+description: Guidelines for AI SDK integration, tool calling, and agent orchestration
+---
+
+# AI Integration Standards
+
+## Vercel AI SDK Usage
+Based on [tech-stack.md](mdc:_docs/tech-stack.md) guidelines:
+
+### Chat Integration
+```typescript
+// Use useChat hook for streaming responses
+const { messages, append, isLoading } = useChat({
+  api: '/api/chat',
+  onToolCall: handleToolCall,
+  onFinish: handleMessageFinish
+})
+```
+
+### Tool Definitions
+All tools must use Zod schemas for validation:
+
+```typescript
+const toolName = {
+  name: 'tool_name',
+  description: 'Clear description of tool functionality',
+  parameters: z.object({
+    param: z.string().describe('Parameter description'),
+    optional: z.number().optional().default(0)
+  }),
+  execute: async (params) => {
+    // Tool implementation with error handling
+  }
+}
+```
+
+## Error Handling Patterns
+Implement AI-specific error boundaries and handling:
+
+```typescript
+// Wrap AI operations in try-catch
+try {
+  const result = await aiOperation()
+} catch (error) {
+  if (error.message.includes('rate_limit')) {
+    // Handle rate limiting
+  } else if (error.message.includes('context_length')) {
+    // Handle token limits
+  }
+}
+```
+
+## Agent System
+For agent-related code (Phase 4+):
+- Implement Agent interface from [phase-4-agents.md](mdc:_docs/phases/phase-4-agents.md)
+- Use proper agent lifecycle management
+- Include comprehensive logging and monitoring
+- Implement retry and fallback mechanisms
+
+## Performance Considerations
+- Implement streaming for all AI responses
+- Cache embeddings to avoid recomputation
+- Use proper loading states and progress indicators
+- Monitor token usage and costs
+- Implement request debouncing where appropriate
+
+## Tool Registry
+Register all tools in centralized registry:
+- Location: [lib/tools/registry.ts](mdc:lib/tools/registry.ts)
+- Include capability descriptions
+- Implement proper error handling
+- Add execution time and cost tracking

@@ -1,0 +1,32 @@
+---
+alwaysApply: true
+---
+
+# AI Lab Project Structure Guide
+
+This is an AI-first codebase following modular architecture principles. Key structural guidelines:
+
+## Directory Organization
+- [app/](mdc:app/) - Next.js App Router with API routes and pages
+- [components/](mdc:components/) - Reusable UI components organized by feature
+- [lib/](mdc:lib/) - Core business logic and utilities
+- [hooks/](mdc:hooks/) - Custom React hooks
+- [stores/](mdc:stores/) - Zustand state management
+- [types/](mdc:types/) - TypeScript type definitions
+- [constants/](mdc:constants/) - Application constants and configuration
+- [_docs/](mdc:_docs/) - Project documentation and phase plans
+
+## Key Documentation Files
+- [project-overview.md](mdc:_docs/project-overview.md) - Project goals and phase breakdown
+- [project-rules.md](mdc:_docs/project-rules.md) - Comprehensive coding standards and conventions
+- [tech-stack.md](mdc:_docs/tech-stack.md) - Technology best practices and limitations
+- [ui-rules.md](mdc:_docs/ui-rules.md) - Design principles and component patterns
+- [theme-rules.md](mdc:_docs/theme-rules.md) - Color system and visual styling
+- [user-flow.md](mdc:_docs/user-flow.md) - User journey and navigation patterns
+
+## Core Principles
+- Keep files under 500 lines maximum
+- Use descriptive file and function names
+- Include @fileoverview comments at top of files
+- Follow kebab-case for file names (e.g., chat-interface.tsx)
+- Organize imports: external → internal types → internal utilities → components → hooks → stores
